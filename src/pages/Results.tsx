@@ -29,8 +29,7 @@ useEffect(() => {
   const focus = decisions.roadmapFocus;
   const qaBudget = decisions.qaBudget;
 
-  // --- Sprint effort hesaplama ---
-  const sprintCapacity = 20; // her sprint için kapasite (story point)
+  const sprintCapacity = 20; 
 
   const sprint1Effort = tasks
     .filter((t) => sprintAssignments[t.id] === "Sprint 1")
@@ -40,12 +39,11 @@ useEffect(() => {
     .filter((t) => sprintAssignments[t.id] === "Sprint 2")
     .reduce((sum, t) => sum + t.effort, 0);
 
-  const overCommit1 = Math.max(0, sprint1Effort - sprintCapacity) / sprintCapacity; // 0–∞
+  const overCommit1 = Math.max(0, sprint1Effort - sprintCapacity) / sprintCapacity; 
   const overCommit2 = Math.max(0, sprint2Effort - sprintCapacity) / sprintCapacity;
 
   const overCommitTotal = overCommit1 + overCommit2;
 
-  // --- Hire engineer effect ---
   if (hireEngineer === "Yes") {
     delivery += 15;
     burnout -= 20;
@@ -54,7 +52,6 @@ useEffect(() => {
     burnout += 15;
   }
 
-  // --- Roadmap focus effect ---
   if (focus === "Performance") {
     delay -= 15;
     delivery += 5;
@@ -66,7 +63,6 @@ useEffect(() => {
     delay += 5;
   }
 
-  // --- QA Budget effect ---
   const qaFactor = qaBudget / 100;
 
   quality += qaFactor * 20;
@@ -74,15 +70,12 @@ useEffect(() => {
   delivery += qaFactor * 5;
   burnout -= qaFactor * 10;
 
-  // --- Overcommit effect (BURASI BACKLOG ETKİSİ) ---
   if (overCommitTotal > 0) {
-    // kapasiteyi aştıkça delivery düşsün, delay & burnout artsın
     delivery -= overCommitTotal * 25;
     delay += overCommitTotal * 30;
     burnout += overCommitTotal * 35;
   }
 
-  // Round + clamp
   delivery = Math.min(100, Math.max(0, Math.round(delivery)));
   delay = Math.min(100, Math.max(0, Math.round(delay)));
   burnout = Math.min(100, Math.max(0, Math.round(burnout)));
@@ -100,10 +93,9 @@ useEffect(() => {
 
  return (
   <div>
-    <h1 className="text-2xl font-bold mb-6">Results</h1>
+    <h1 className="text-2xl font-bold mb-6 text-slate-900">Results</h1>
 
-    {/* Debug / explanation of current decisions */}
-    <div className="mb-6 p-4 bg-white rounded-xl border shadow text-sm text-gray-700">
+    <div className="mb-6 p-4 bg-white rounded-xl border border-slate-100 shadow text-sm text-slate-700">
       <div className="font-semibold mb-2">Current decisions</div>
       <div>Hire engineer: <span className="font-medium">{decisions.hireEngineer || "Not decided"}</span></div>
       <div>Roadmap focus: <span className="font-medium">{decisions.roadmapFocus || "Not decided"}</span></div>
@@ -157,12 +149,13 @@ useEffect(() => {
 
 function ResultCard({ title, value, color }: any) {
   return (
-    <div className="p-6 bg-white shadow rounded-xl border">
-      <div className="text-gray-600 text-sm mb-2">{title}</div>
+    <div className="p-6 bg-white shadow rounded-xl border border-slate-100">
+      <div className="text-slate-500 text-sm mb-2">{title}</div>
       <div className="flex items-center gap-2">
         <div className={`w-3 h-3 rounded-full ${color}`} />
-        <div className="text-xl font-bold">{value}%</div>
+        <div className="text-xl font-bold text-slate-900">{value}%</div>
       </div>
     </div>
   );
 }
+
